@@ -1,5 +1,5 @@
 <?php
-// --- FILE: admin.php (Fixed for Modal/Validation/DB Schema) ---
+// --- FILE: admin.php
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -9,22 +9,22 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/config.php';
 
 
-// --- 1. Security Check ---
+// --- 1. Sicherheitsprüfung ---
 if (empty($_SESSION['user_id'])) {
     header('Location: index.php');
     exit;
 }
 
-// RESTRICTION: Only Admin can access this page
+// EINSCHRÄNKUNG: Nur Administratoren haben Zugriff auf diese Seite
 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] !== 'Admin') {
     header('Location: staff.php');
     exit;
 }
 
-// --- 2. Data Fetching ---
+// --- 2. Datenabruf ---
 $appointments = $pdo->query("SELECT *, COALESCE(status, 'Pending') as status FROM appointments ORDER BY created_at DESC")->fetchAll();
 $messages = $pdo->query("SELECT * FROM messages ORDER BY created_at DESC")->fetchAll();
-// Selecting specific columns for security
+// Auswahl bestimmter Spalten für die Sicherheit
 $users = $pdo->query("
     SELECT 
         user_id AS id,
@@ -36,10 +36,6 @@ $users = $pdo->query("
     ORDER BY created_at DESC
 ")->fetchAll();
 
-
-// FIX: Removed redundant flash() function definition.
-// It is already correctly included and defined via require_once '/config.php'.
-
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +46,7 @@ $users = $pdo->query("
     <title>Krankenhaus-Admin - Verwaltungskonsole</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Bestehende Allgemeine Admin-Stile */
+        /* Bestehender Allgemeiner Admin-Stil */
         .admin-main {
             padding: 140px 0 4rem;
             background: var(--bg-light);
@@ -63,11 +59,10 @@ $users = $pdo->query("
             box-shadow: var(--shadow-sm);
             padding: 2rem;
             margin-bottom: 2rem;
-            /* Adjusted for better spacing */
             border-left: 6px solid var(--color-primary);
         }
 
-        /* Dashboard Card Grid - NEW */
+        /* Dashboard-Kartenraster */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -75,7 +70,7 @@ $users = $pdo->query("
             margin-bottom: 2.5rem;
         }
 
-        /* Summary Card - NEW */
+        /* Zusammenfassungskarte */
         .summary-card {
             background: var(--bg-white);
             border-radius: var(--border-radius);
@@ -117,7 +112,7 @@ $users = $pdo->query("
             margin: 0.25rem 0 0;
         }
 
-        /* Content Area/Table Container - NEW */
+        /* Inhaltsbereich/Tabellencontainer */
         .admin-content-area {
             background: var(--bg-white);
             border-radius: var(--border-radius);
@@ -133,10 +128,10 @@ $users = $pdo->query("
 
         .table-section.active {
             display: block;
-            /* Show active section */
+            /* Aktiven Abschnitt anzeigen */
         }
 
-        /* Existing Table Styles */
+        /* Vorhandene Tabellenstile */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -144,7 +139,7 @@ $users = $pdo->query("
         }
 
         .admin-table th {
-            /* Using var(--color-primary) for consistency */
+            /* Verwendung von var(--color-primary) für Konsistenz */
             background: var(--color-primary);
             color: white;
             padding: 12px;
@@ -165,7 +160,7 @@ $users = $pdo->query("
             color: var(--color-dark-bg);
         }
 
-        /* Removed .data-card, replaced by .admin-content-area */
+        /* .data-card entfernt, ersetzt durch .admin-content-area */
         .btn-update,
         .btn-delete {
             padding: 6px 10px;
@@ -189,7 +184,7 @@ $users = $pdo->query("
             border: none;
         }
 
-        /* Status Badges */
+        /* Statusabzeichen */
         .status-badge {
             font-weight: bold;
             padding: 4px 8px;
@@ -197,7 +192,7 @@ $users = $pdo->query("
             font-size: 0.8rem;
         }
 
-        /* Add success color variable for approved status */
+        /* Farbvariable für genehmigten Status hinzufügen */
         .status-badge-Pending {
             color: var(--color-error);
             background: #fef2f2;
@@ -208,7 +203,7 @@ $users = $pdo->query("
             background: #d4edda;
         }
 
-        /* Filter Styles */
+        /* Filterstile */
         .filter-container {
             margin-bottom: 1.5rem;
             background: var(--bg-light);
@@ -226,7 +221,7 @@ $users = $pdo->query("
             box-sizing: border-box;
         }
 
-        /* Modal Styles (Adjusted for consistency with existing structure) */
+        /* Modale Stile (Angepasst an die bestehende Struktur) */
         #registerOverlay.appointment-overlay {
             z-index: 1050;
         }
@@ -244,8 +239,9 @@ $users = $pdo->query("
     <?php include 'header.php'; ?>
 
     <?php
-    // Flash messages logic
-    // Using the base '.toast' class from styles.css
+    // Logik für Flash-Nachrichten
+    
+    // Verwendung der Basisklasse '.toast' aus styles.css
     if ($msg = flash('success')) {
         echo '<div class="toast visible auto-dismiss-toast" style="background: var(--color-tertiary, #108779);">' . htmlspecialchars($msg) . '</div>';
     }
@@ -491,10 +487,13 @@ $users = $pdo->query("
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             /**
-             * Generic function to filter table rows based on an input field.
-             * @param {string} inputId The ID of the text input field.
-             * @param {string} tableId The ID of the table element.
-             */
+* Generische Funktion zum Filtern von Tabellenzeilen anhand eines Eingabefelds.
+
+* @param {string} inputId Die ID des Texteingabefelds.
+
+* @param {string} tableId Die ID des Tabellenelements.
+
+*/
             function setupTableFilter(inputId, tableId) {
                 const input = document.getElementById(inputId);
                 const table = document.getElementById(tableId);
@@ -507,14 +506,15 @@ $users = $pdo->query("
                 input.addEventListener('keyup', function () {
                     const filter = input.value.toUpperCase();
 
-                    // Loop through all table rows
+                    // Alle Tabellenzeilen durchlaufen
                     for (let i = 0; i < rows.length; i++) {
                         let rowVisible = false;
                         const cells = rows[i].getElementsByTagName('td');
 
-                        // Iterate through all cells to find a match
+                        // Alle Zellen durchlaufen, um eine Übereinstimmung zu finden
                         for (let j = 0; j < cells.length; j++) {
-                            // FIX: Skip the last cell (Action column) for ALL tables to prevent filtering on the 'Update/Delete' button text.
+                            // Überspringe die letzte Zelle (Aktionsspalte) für ALLE Tabellen, um zu verhindern, 
+                            // dass nach dem Text der Schaltfläche „Aktualisieren/Löschen“ gefiltert wird.
                             if (j === cells.length - 1) {
                                 continue;
                             }
@@ -535,23 +535,23 @@ $users = $pdo->query("
                 });
             }
 
-            // Initialize filters for all admin tables
+            // Filter für alle Admin-Tabellen initialisieren
             setupTableFilter('adminApptFilter', 'adminApptTable');
             setupTableFilter('adminMsgFilter', 'adminMsgTable');
             setupTableFilter('adminUserFilter', 'adminUserTable');
 
 
-            // 🟢 NEW: Dashboard Card/Tab Switching Logic
+            // Logik zum Wechseln von Dashboard-Karten/Registerkarten //  Dashboard Card/Tab Switching Logic
             const summaryCards = document.querySelectorAll('.summary-card');
             const tableSections = document.querySelectorAll('.table-section');
 
-            // Function to switch active content
+            // Funktion zum Umschalten des aktiven Inhalts
             function switchContent(targetId) {
-                // Deactivate all cards and sections
+                // Alle Karten und Abschnitte deaktivieren
                 summaryCards.forEach(card => card.classList.remove('active'));
                 tableSections.forEach(section => section.classList.remove('active'));
 
-                // Activate the corresponding card and section
+                // Aktivieren Sie die entsprechende Karte und den entsprechenden Abschnitt.
                 const activeCard = document.querySelector(`.summary-card[data-target="${targetId}"]`);
                 const activeSection = document.getElementById(`${targetId}-section`);
 
@@ -559,7 +559,7 @@ $users = $pdo->query("
                 if (activeSection) activeSection.classList.add('active');
             }
 
-            // Add click listeners to cards
+            // Füge Klick-Listener zu Karten hinzu
             summaryCards.forEach(card => {
                 card.addEventListener('click', function () {
                     const target = this.getAttribute('data-target');
@@ -567,7 +567,7 @@ $users = $pdo->query("
                 });
             });
 
-            // 🟢 FIX: Modal Logic (kept consistent)
+            // Modallogik (konsistent gehalten)
             const modal = document.getElementById('registerOverlay');
             const openBtn = document.getElementById('openRegisterModal');
             const closeBtn = document.getElementById('closeRegister');
@@ -596,7 +596,8 @@ $users = $pdo->query("
                 });
             }
 
-            // Auto-dismiss toast logic (kept separate as it handles PHP flash messages)
+            // Logik zum automatischen Ausblenden von Toast-Meldungen 
+            // (separat gehalten, da sie PHP-Flash-Meldungen verarbeitet)
             const successToast = document.querySelector('.auto-dismiss-toast');
             if (successToast) {
                 const delay = 3500;

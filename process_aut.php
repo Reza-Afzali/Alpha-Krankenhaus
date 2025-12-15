@@ -1,11 +1,10 @@
 <?php
-// FIX: Removed session_start() from here because config.php already starts it
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/config.php';
 
 $action = $_POST['action'] ?? '';
 
-// LOGIN LOGIC
+// ANMELDELOGIK
 if ($action === 'login') {
     $email = filter_var(trim($_POST['login_email'] ?? ''), FILTER_VALIDATE_EMAIL);
     $password = $_POST['login_password'] ?? '';
@@ -20,14 +19,14 @@ if ($action === 'login') {
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['is_logged_in'] = true;
 
-        flash('success', 'Logged in! Opening admin dashboard.');
-        // ... inside LOGIN LOGIC block ...
+        //flash('success', 'Eingeloggt! Admin-Dashboard wird geöffnet.');
+        // ... innerhalb des LOGIN LOGIC-Blocks ...
         if ($user && password_verify($password, $user['password_hash'])) {
-            // ... (session variables) ...
+            // ... (Sitzungsvariablen) ...
 
-            flash('success', 'Logged in! Opening dashboard.');
+            flash('success', 'Eingeloggt! Dashboard wird geöffnet.');
 
-            // FIX: Role-based redirection
+            // Rollenbasierte Umleitung
             if ($user['role'] === 'Admin') {
                 header('Location: admin.php');
             } else {
@@ -35,15 +34,15 @@ if ($action === 'login') {
             }
             exit;
         }
-        // ...
+
     } else {
-        flash('error', 'Invalid email or password.');
+        flash('error', 'Ungültige E-Mail-Adresse oder ungültiges Passwort.');
         header('Location: index.php');
     }
     exit;
 }
 
-// REGISTER LOGIC
+// REGISTERLOGIK
 if ($action === 'register') {
     $full_name = trim($_POST['full_name'] ?? '');
     $dob = $_POST['dob'] ?? '';
@@ -53,13 +52,13 @@ if ($action === 'register') {
     $confirm = $_POST['confirm_password'] ?? '';
 
     if (!$full_name || !$dob || !$email || !$role || !$password || !$confirm) {
-        flash('error', 'All fields are required.');
+        flash('error', 'Alle Felder sind Pflichtfelder.');
         header('Location: index.php');
         exit;
     }
 
     if ($password !== $confirm) {
-        flash('error', 'Passwords do not match.');
+        flash('error', 'Die Passwörter stimmen nicht überein.');
         header('Location: index.php');
         exit;
     }
@@ -67,14 +66,14 @@ if ($action === 'register') {
     $stmt_check = $pdo->prepare("SELECT user_id FROM users WHERE email = :email");
     $stmt_check->execute([':email' => $email]);
     if ($stmt_check->rowCount() > 0) {
-        flash('error', 'Email already exists.');
+        flash('error', 'E-Mail existiert bereits.');
         header('Location: index.php');
         exit;
     }
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // FIX: Added created_at and NOW()
+    // created_at und NOW() hinzugefügt
     $stmt = $pdo->prepare("INSERT INTO users (full_name, email, password_hash, dob, role, created_at) VALUES (:name, :email, :pass, :dob, :role, NOW())");
 
     $stmt->execute([
@@ -90,13 +89,14 @@ if ($action === 'register') {
     $_SESSION['user_role'] = $role;
     $_SESSION['is_logged_in'] = true;
 
-    flash('success', 'Account created! Redirecting to admin.');
-    // ... inside REGISTER LOGIC block ...
-    // ... (database insert and session setup) ...
+    flash('success', 'Konto erstellt! Weiterleitung zum Adminbereich.');
+    // ... innerhalb des REGISTER LOGIC-Blocks ...
 
-    flash('success', 'Account created! Redirecting to dashboard.');
+    // ... (Datenbankeinfügung und Sitzungseinrichtung) ...
 
-    // FIX: Role-based redirection for new users
+    flash('success', 'Konto erstellt! Weiterleitung zum Dashboard.');
+
+    // Rollenbasierte Weiterleitung für neue Benutzer
     if ($role === 'Admin') {
         header('Location: admin.php');
     } else {

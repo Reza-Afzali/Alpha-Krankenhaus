@@ -44,25 +44,89 @@ $roles = ['Admin', 'Doctor', 'Staff'];
 
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <title>Benutzerrolle Bearbeiten</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* CSS-Stile beibehalten */
-        .admin-main { padding: 120px 0 4rem; background: var(--bg-light); min-height: 100vh; }
-        .data-card { max-width: 600px; margin: 2rem auto; background: var(--bg-white); border-radius: var(--border-radius); box-shadow: var(--shadow-md); padding: 2rem; }
-        .form-row { margin-bottom: 1.5rem; }
-        .form-row label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-dark); }
+        .admin-main {
+            padding: 120px 0 4rem;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        .data-card {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-dark);
+        }
+
         /* Hier wurde input[type="email"] im Original-Code vergessen, aber für Konsistenz hinzugefügt, falls es jemals benötigt wird */
-        .form-row input[type="text"], .form-row select, .form-row input[type="email"] { width: 100%; padding: 10px; border: 1px solid var(--color-border-subtle); border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
-        .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: flex-end; }
-        .btn-cancel { background: var(--bg-light); color: var(--color-text-medium); border: 1px solid var(--color-border-subtle); padding: 10px 20px; border-radius: 6px; text-decoration: none; cursor: pointer; transition: background 0.2s; }
-        .btn-cancel:hover { background: var(--color-border-subtle); }
-        .btn-primary { background: var(--color-primary); color: white; border: 1px solid var(--color-primary); padding: 10px 20px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background: var(--color-primary-dark); }
-    </style> 
+        .form-row input[type="text"],
+        .form-row select,
+        .form-row input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            background: var(--bg-light);
+            color: var(--color-text-medium);
+            border: 1px solid var(--color-border-subtle);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--color-border-subtle);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            border: 1px solid var(--color-primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+        }
+    </style>
 </head>
+
 <body>
     <?php include 'header.php'; ?>
 
@@ -70,7 +134,10 @@ $roles = ['Admin', 'Doctor', 'Staff'];
         <div class="container">
             <div class="data-card">
                 <h1 class="section-title">Benutzerrolle Bearbeiten (ID: <?= $user_id ?>)</h1>
-                <p>Ändern Sie die Rolle für **<?= htmlspecialchars($user['full_name']) ?>** (<?= htmlspecialchars($user['email']) ?>).</p>
+                <p>Ändern Sie die Rolle für **<?= htmlspecialchars($user['full_name']) ?>**
+                    (<?= htmlspecialchars($user['email']) ?>).</p>
+
+                // Ein Formular zum Bearbeiten von Benutzerrollen
 
                 <form action="process_update_user.php" method="POST">
                     <input type="hidden" name="user_id" value="<?= $user_id ?>">
@@ -95,7 +162,7 @@ $roles = ['Admin', 'Doctor', 'Staff'];
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    
+
                     <div class="form-actions">
                         <a href="admin.php" class="btn-cancel">Abbrechen und Zurück</a>
                         <button type="submit" class="btn-primary">Rolle Aktualisieren</button>
@@ -106,4 +173,5 @@ $roles = ['Admin', 'Doctor', 'Staff'];
     </main>
     <?php include 'footer.php'; ?>
 </body>
+
 </html>

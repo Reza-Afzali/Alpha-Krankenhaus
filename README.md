@@ -1,7 +1,6 @@
-# Alpha Krankenhaus – Termin- und Benutzerverwaltung
+# AlphaHospital – Termin- und Benutzerverwaltung
 
 ## Überblick
-
 **AlphaHospital** ist eine webbasierte Anwendung zur Verwaltung von Arztterminen sowie zur Benutzer- und Rollenverwaltung (Admin, Mitarbeiter/Staff, Ärzte). Patienten können Termine online buchen, während Mitarbeiter und Administratoren diese über geschützte Dashboards verwalten.
 
 Die Anwendung basiert auf einem schlanken, wartbaren Technologie-Stack mit PHP, MySQL (PDO) und Vanilla JavaScript und legt besonderen Wert auf Sicherheit und klare Trennung von Frontend- und Backend-Logik.
@@ -11,27 +10,22 @@ Die Anwendung basiert auf einem schlanken, wartbaren Technologie-Stack mit PHP, 
 ## Technologie-Stack
 
 **Backend**
-
 - PHP 7.4 oder höher
 - PDO für sichere Datenbankzugriffe
 
 **Datenbank**
-
 - MySQL / MariaDB
 
 **Frontend**
-
 - HTML5
 - CSS3 (`styles.css`)
 - Vanilla JavaScript (`script.js`)
 
 **Sicherheit**
-
 - Passwort-Hashing mit `password_hash()` und Verifikation mit `password_verify()`
 - Serverseitige Validierung aller Eingaben
 
 **Kommunikation**
-
 - AJAX-Endpunkte (Fetch API)
 - Z. B. `fetch_booked_slots.php`, `process_*.php`
 
@@ -50,20 +44,41 @@ Stellen Sie sicher, dass folgende Komponenten installiert und korrekt konfigurie
 ## Projektstruktur
 
 ```
-/alphahospital/
-├── admin.php                 # Admin-Dashboard
-├── staff.php                 # Mitarbeiter-Dashboard
-├── process_aut.php           # Login & Logout Verarbeitung
-├── process_register.php      # Benutzerregistrierung (AJAX)
-├── process_appointment.php   # Terminbuchung verarbeiten
-├── fetch_booked_slots.php    # AJAX-Verfügbarkeitsprüfung
-├── process_update.php        # Terminbearbeitung (Server-seitig)
-├── process_delete.php        # Terminlöschung (Server-seitig)
-├── config.php                # Allgemeine Konfiguration
-├── db.php                    # Datenbankverbindung (PDO)
-├── script.js                 # Client-seitige Logik & AJAX
-├── styles.css                # Zentrales Stylesheet
-└── footer.php                # Gemeinsamer Footer
+/ERM/
+├── images/                         # Ordner für Bilder und grafische Assets.
+├── about.php                       # Seite mit allgemeinen Informationen (z.B. Über 
+├── admin.php                       # Dashboard für Administratoren.
+├── alphahospital.sql               # Datenbank-Schema (Dump)
+├── career.php                      # Seite für Stellenangebote oder 
+├── config.php                      # Allgemeine Konfigurationsdatei.
+├── contact.php                     # Kontaktformular-Seite.
+├── datenschutz.php                 # Seite mit den Datenschutzbestimmungen.
+├── db.php                          # Datenbankverbindung mit PDO.
+├── delete_record.php               # Skript zur serverseitigen Löschung von 
+├── edit_form.php                   # Formular zum Bearbeiten von Daten.
+├── edit_user.php                   # Formular/Logik zur Bearbeitung von Benutzerdaten.
+├── email_functions.php             # Funktionen zum Senden von 
+├── fetch_booked_slots.php          # AJAX-Endpunkt zur Prüfung der Terminverfügbarkeit.
+├── footer.php                      # Gemeinsamer Footer-Bereich.
+├── header.php                      # Gemeinsamer Header-Bereich.
+├── impressum.php                   # Impressumsseite.
+├── index.php                       # Startseite (Terminbuchung für Patienten).
+├── logout.php                      # Skript zur Benutzerabmeldung.
+├── process_appointment_status.php  # Verarbeitet Statusänderungen von Terminen (z.B. 
+├── process_appointment.php         # Serverseitige Verarbeitung der Terminbuchung.
+├── process_aut.php                 # Verarbeitet den Login- und Logout-Vorgang (Authentifizierung).
+├── process_contact.php             # Verarbeitet das Kontaktformular.
+├── process_delete.php              # Serverseitige Terminlöschung 
+├── process_login.php               # Skript zur Verarbeitung des Login-Formulars.
+├── process_register.php            # Verarbeitet die Benutzerregistrierung (AJAX).
+├── process_update_user.php         # Skript zur Aktualisierung von Benutzerdaten.
+├── process_update.php              # Serverseitige Terminbearbeitung (explizit im README genannt).
+├── readme.md                       # Projekt-Dokumentation und Installationsanleitung.
+├── script.js                       # Client-seitige Logik (Vanilla JavaScript) und AJAX
+├── services.php                    # Seite, die die angebotenen Dienstleistungen
+├── staff.php                       # Dashboard für Mitarbeiter (Staff).
+├── styles.css                      # Zentrales Stylesheet (CSS3).
+└── test.php
 ```
 
 ---
@@ -73,11 +88,9 @@ Stellen Sie sicher, dass folgende Komponenten installiert und korrekt konfigurie
 Bitte erstellen Sie die folgenden Tabellen und tragen Sie Ihre Zugangsdaten in `db.php` ein.
 
 ### Tabelle: `users`
-
 Speichert Benutzerkonten für Administratoren, Mitarbeiter und Ärzte.
 
 **Felder (Beispiel):**
-
 - `id` (INT, PK, AUTO_INCREMENT)
 - `email` (VARCHAR, UNIQUE)
 - `password_hash` (VARCHAR)
@@ -88,11 +101,9 @@ Speichert Benutzerkonten für Administratoren, Mitarbeiter und Ärzte.
 ---
 
 ### Tabelle: `appointments`
-
 Speichert alle Terminbuchungen von Patienten.
 
 **Felder (Beispiel):**
-
 - `id` (INT, PK, AUTO_INCREMENT)
 - `first_name` (VARCHAR)
 - `email` (VARCHAR)
@@ -105,11 +116,9 @@ Speichert alle Terminbuchungen von Patienten.
 ---
 
 ### Tabelle: `messages`
-
 Speichert Patientenanfragen und Kontaktformulare.
 
 **Felder (Beispiel):**
-
 - `id` (INT, PK, AUTO_INCREMENT)
 - `name` (VARCHAR)
 - `email` (VARCHAR)
@@ -121,7 +130,6 @@ Speichert Patientenanfragen und Kontaktformulare.
 ## Funktionsübersicht
 
 ### Frontend (Patienten)
-
 - Terminbuchung über die Startseite
 - Echtzeit-Prüfung verfügbarer Zeitfenster (AJAX)
 - Formularvalidierung auf Client- und Server-Seite
@@ -129,7 +137,6 @@ Speichert Patientenanfragen und Kontaktformulare.
 ---
 
 ### Authentifizierung
-
 - Login für Mitarbeiter und Administratoren
 - Verarbeitung über `process_aut.php`
 - Rollenbasierte Weiterleitung nach erfolgreichem Login
@@ -139,13 +146,11 @@ Speichert Patientenanfragen und Kontaktformulare.
 ### Dashboards
 
 **Admin-Dashboard (`admin.php`)**
-
 - Übersicht aller Termine
 - Genehmigen, Bearbeiten und Löschen von Terminen
 - Benutzerverwaltung (optional erweiterbar)
 
 **Mitarbeiter-Dashboard (`staff.php`)**
-
 - Anzeige und Verwaltung zugewiesener Termine
 - Statusänderungen (z. B. genehmigt / abgelehnt)
 
@@ -174,7 +179,6 @@ Speichert Patientenanfragen und Kontaktformulare.
 ## Erweiterbarkeit
 
 Das System ist modular aufgebaut und kann leicht erweitert werden, z. B. um:
-
 - E-Mail-Benachrichtigungen
 - Mehrsprachigkeit
 - Rollen- und Rechteverwaltung
@@ -189,3 +193,4 @@ Dieses Projekt ist als internes oder Lernprojekt konzipiert. Eine produktive Nut
 ---
 
 **AlphaHospital** – Saubere Struktur, sichere Terminverwaltung, moderne Webtechnologien.
+

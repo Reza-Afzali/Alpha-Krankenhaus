@@ -3,11 +3,12 @@
 session_start();
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/email_functions.php'; // NEW: Include the email helper
+require_once __DIR__ . '/email_functions.php'; // E-Mail-Hilfe einbinden
 
-// Placeholder flash function (ensure this is available, e.g., in config.php)
+// Platzhalter-Flash-Funktion (stellen Sie sicher, dass diese verfügbar ist, z. B. in config.php)
 if (!function_exists('flash')) {
-    function flash($key, $message = null) {
+    function flash($key, $message = null)
+    {
         if ($message) {
             $_SESSION['flash'][$key] = $message;
         } else {
@@ -18,29 +19,29 @@ if (!function_exists('flash')) {
     }
 }
 
-
-// 1. Security Check
+// 1. Sicherheitsprüfung
 if (empty($_SESSION['user_id'])) {
     flash('error', 'Authentication required.');
     header('Location: index.php');
     exit;
 }
 
-// 2. Input Validation
+// 2. Eingabevalidierung
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['id']) || $_POST['action'] !== 'approve') {
     flash('error', 'Invalid request for appointment approval.');
     header('Location: staff.php');
     exit;
 }
 
-$appointmentId = (int)$_POST['id'];
+$appointmentId = (int) $_POST['id'];
 
 try {
-    // Start a transaction for safety
+    // Starten Sie aus Sicherheitsgründen eine Transaktion.
     $pdo->beginTransaction();
 
-    // 3. Fetch Appointment Details and current status
-    // Fetch everything needed for the email before the update
+    // 3. Termindetails und aktuellen Status abrufen
+
+    // Alle für die E-Mail benötigten Informationen vor der Aktualisierung abrufen
     $stmt = $pdo->prepare("SELECT * FROM appointments WHERE id = ?");
     $stmt->execute([$appointmentId]);
     $appointment = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -51,42 +52,42 @@ try {
         exit;
     }
 
-    // Check if the appointment is already approved (prevent re-send/re-update)
+    // Prüfen, ob der Termin bereits genehmigt wurde (erneutes Senden/Aktualisieren verhindern)
     if ($appointment['status'] === 'Approved') {
         flash('warning', 'Appointment ID ' . $appointmentId . ' is already approved. No action taken.');
-        $pdo->commit(); 
+        $pdo->commit();
         header('Location: staff.php');
         exit;
     }
 
-    // 4. Update the appointment status
+    // 4. Terminstatus aktualisieren
     $updateStmt = $pdo->prepare("UPDATE appointments SET status = 'Approved' WHERE id = ?");
     $updateStmt->execute([$appointmentId]);
 
-    // Commit the database changes
+    // Datenbankänderungen übernehmen
     $pdo->commit();
 
-    // 5. Send the Approval Email (This block ONLY executes IF the DB update succeeded)
+    // 5. Bestätigungs-E-Mail senden (Dieser Block wird NUR ausgeführt, WENN die Datenbankaktualisierung erfolgreich war)
     $emailSent = sendAppointmentApprovalEmail($appointment);
 
     if ($emailSent) {
-        flash('success', 'Appointment successfully **Approved** and Confirmation Email sent to ' . htmlspecialchars($appointment['email']) . '.');
+        flash('success', 'Termin erfolgreich **genehmigt** und Bestätigungs-E-Mail versendet an ' . htmlspecialchars($appointment['email']) . '.');
     } else {
-        // Log the email failure, but still report DB success
-        error_log("Email sending failed for appointment ID: " . $appointmentId);
-        flash('success', 'Appointment successfully **Approved**. WARNING: Failed to send confirmation email. Check server logs.');
+        // E-Mail-Fehler protokollieren, aber trotzdem Datenbankerfolg melden
+        error_log("E-Mail-Versand für Termin-ID fehlgeschlagen: " . $appointmentId);
+        flash('success', 'Termin erfolgreich **genehmigt**. WARNUNG: Bestätigungs-E-Mail konnte nicht versendet werden. Serverprotokolle prüfen.');
     }
 
 } catch (PDOException $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    error_log("Database Error in process_appointment_status: " . $e->getMessage());
-    flash('error', 'A database error occurred during approval: ' . $e->getMessage());
+    error_log("Datenbankfehler in process_appointment_status: " . $e->getMessage());
+    flash('error', 'Bei der Genehmigung ist ein Datenbankfehler aufgetreten: ' . $e->getMessage());
 
 } catch (Exception $e) {
-    error_log("General Error in process_appointment_status: " . $e->getMessage());
-    flash('error', 'An unexpected error occurred: ' . $e->getMessage());
+    error_log("Allgemeiner Fehler in process_appointment_status: " . $e->getMessage());
+    flash('error', 'Es ist ein unerwarteter Fehler aufgetreten: ' . $e->getMessage());
 }
 
 header('Location: staff.php');

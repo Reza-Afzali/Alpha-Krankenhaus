@@ -20,6 +20,6 @@ $stmt->execute([
     ':message' => $message
 ]);
 
-flash('success', 'Message Sent Successfully!');
+flash('success', 'Nachricht erfolgreich gesendet!');
 header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'contact.php'));
 exit;

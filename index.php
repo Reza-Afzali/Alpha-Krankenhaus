@@ -4,7 +4,8 @@
 <section class="full-hero">
     <div class="hero-content container">
         <h1 class="hero-main-title">Mitfühlende Pflege.<br />Fortschrittliche Medizin.</h1>
-        <p class="hero-main-subtitle">Erleben Sie erstklassige Gesundheitsversorgung mit Fachwissen und Mitgefühl an Ihrer Seite.</p>
+        <p class="hero-main-subtitle">Erleben Sie erstklassige Gesundheitsversorgung mit Fachwissen und Mitgefühl an
+            Ihrer Seite.</p>
     </div>
 </section>
 
@@ -19,7 +20,7 @@ if ($err = flash('error')) {
     echo '<div class="toast visible" style="background:#c82333;position:fixed;left:50%;transform:translateX(-50%);bottom:30px;z-index:9999;">' . htmlspecialchars($err) . '</div>';
 }
 ?>
-    
+
 <main class="container main-content">
 
     <section class="main-card">
@@ -44,18 +45,9 @@ if ($err = flash('error')) {
                 <div class="feature-strip">
                     <div class="feature">
                         <div class="feature-icon" aria-hidden="true">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="lucide lucide-check"
-                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-check">
                                 <path d="M20 6 9 17l-5-5" />
                             </svg>
                         </div>
@@ -63,45 +55,25 @@ if ($err = flash('error')) {
                     </div>
                     <div class="feature">
                         <div class="feature-icon" aria-hidden="true">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="lucide lucide-star"
-                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-star">
                                 <polygon
-                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                                />
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                             </svg>
                         </div>
                         <div class="feature-text">Preisgekrönter Service</div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon" aria-hidden="true">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="lucide lucide-hand"
-                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-hand">
                                 <path d="M18 11V5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
                                 <path d="M14 7V5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
                                 <path d="M10 11V5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
                                 <path
-                                    d="M18 11c0 2-2 3-2 3H8s-2-1-2-3c0-2.4 1.5-4 4-4 2.7 0 5 2 5 4h1a2 2 0 0 1 2 2v0c0 2-2 3-2 3H6"
-                                />
+                                    d="M18 11c0 2-2 3-2 3H8s-2-1-2-3c0-2.4 1.5-4 4-4 2.7 0 5 2 5 4h1a2 2 0 0 1 2 2v0c0 2-2 3-2 3H6" />
                             </svg>
                         </div>
                         <div class="feature-text">Vertrauenswürdige Pflege</div>
@@ -111,11 +83,8 @@ if ($err = flash('error')) {
 
             <div class="hero-right">
                 <div class="hero-image-frame">
-                    <img
-                        src="images/img13.jpg"
-                        alt="Lächelnder männlicher Arzt in einem weißen Kittel"
-                        onerror="this.onerror=null;this.src='https://placehold.co/560x400/999999/FFFFFF?text=Doctor+Portrait';"
-                    />
+                    <img src="images/img13.jpg" alt="Lächelnder männlicher Arzt in einem weißen Kittel"
+                        onerror="this.onerror=null;this.src='https://placehold.co/560x400/999999/FFFFFF?text=Doctor+Portrait';" />
                 </div>
             </div>
         </div>
@@ -148,27 +117,14 @@ if ($err = flash('error')) {
             und ethische Praxis auf. Entdecken Sie die Werte, die jede unserer
             Entscheidungen leiten.
         </p>
-        <div
-            class="cards-grid"
-            style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))"
-        >
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))">
             <article class="info-card info-card-center">
                 <div class="feature-icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-heart"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-heart">
                         <path
-                            d="M19 14c1.49-1.46 3-3.23 3-5.55A5.55 5.55 0 0 0 16.5 3 5.55 5.55 0 0 0 12 5.09 5.55 5.55 0 0 0 7.5 3 5.55 5.55 0 0 0 2 8.45c0 2.32 1.5 4.09 3 5.55l7 7Z"
-                        />
+                            d="M19 14c1.49-1.46 3-3.23 3-5.55A5.55 5.55 0 0 0 16.5 3 5.55 5.55 0 0 0 12 5.09 5.55 5.55 0 0 0 7.5 3 5.55 5.55 0 0 0 2 8.45c0 2.32 1.5 4.09 3 5.55l7 7Z" />
                     </svg>
                 </div>
                 <h3>Mitgefühl Zuerst</h3>
@@ -181,18 +137,9 @@ if ($err = flash('error')) {
 
             <article class="info-card info-card-center">
                 <div class="feature-icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-lamp"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-lamp">
                         <path d="M8 2h8l-1 6h-6l-1-6Z" />
                         <path d="m11 16 1-4 1 4 2-2 3 5H5l3-5 2 2Z" />
                         <path d="M12 22a4 4 0 0 0 4-4H8a4 4 0 0 0 4 4Z" />
@@ -208,18 +155,9 @@ if ($err = flash('error')) {
 
             <article class="info-card info-card-center">
                 <div class="feature-icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-shield"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-shield">
                         <path d="M20 13c0 5-6 9-8 9s-8-4-8-9V5l8-3 8 3z" />
                     </svg>
                 </div>
@@ -241,7 +179,9 @@ if ($err = flash('error')) {
                 <img src="images/img18.jpg" alt="Wissenschaftler, die durch ein Mikroskop schauen" />
                 <h3>Klinische Forschung & Studien</h3>
                 <p>
-                    Wir beteiligen uns aktiv an führenden nationalen und internationalen klinischen Studien. Dieses Engagement für die Forschung stellt sicher, dass unsere Patienten frühen Zugang zu vielversprechenden neuen Therapien und Behandlungen haben, bevor diese allgemein verfügbar sind.
+                    Wir beteiligen uns aktiv an führenden nationalen und internationalen klinischen Studien. Dieses
+                    Engagement für die Forschung stellt sicher, dass unsere Patienten frühen Zugang zu
+                    vielversprechenden neuen Therapien und Behandlungen haben, bevor diese allgemein verfügbar sind.
                 </p>
             </article>
 
@@ -249,7 +189,9 @@ if ($err = flash('error')) {
                 <img src="images/img19.jpg" alt="Eine Person meditiert oder macht leichte Übungen" />
                 <h3>Präventive Wellness-Programme</h3>
                 <p>
-                    Mit Fokus auf proaktive Gesundheit umfassen unsere Wellness-Programme spezialisierte Dienstleistungen für das Management chronischer Krankheiten, Ernährungsberatung und Stressreduzierung, die Ihnen helfen, langfristige Gesundheit und Vitalität zu erhalten.
+                    Mit Fokus auf proaktive Gesundheit umfassen unsere Wellness-Programme spezialisierte
+                    Dienstleistungen für das Management chronischer Krankheiten, Ernährungsberatung und
+                    Stressreduzierung, die Ihnen helfen, langfristige Gesundheit und Vitalität zu erhalten.
                 </p>
             </article>
 
@@ -257,7 +199,9 @@ if ($err = flash('error')) {
                 <img src="images/img20.jpg" alt="Arzt spricht mit einem Patienten über einen Computerbildschirm" />
                 <h3>Virtuelle Pflege & Telemedizin</h3>
                 <p>
-                    Erhalten Sie fachärztliche Beratungen bequem von zu Hause aus. Unsere sichere Telemedizin-Plattform ermöglicht Folgetermine, Rezeptverwaltung und Spezialistenbesuche und macht die Gesundheitsversorgung bequemer.
+                    Erhalten Sie fachärztliche Beratungen bequem von zu Hause aus. Unsere sichere Telemedizin-Plattform
+                    ermöglicht Folgetermine, Rezeptverwaltung und Spezialistenbesuche und macht die
+                    Gesundheitsversorgung bequemer.
                 </p>
             </article>
         </div>
@@ -355,7 +299,8 @@ if ($err = flash('error')) {
                     align-items: center;
                 ">
             <div class="hero-image-frame" style="height: 400px">
-                <img src="images/img17.jpg" alt="Krankenhauspersonal leitet eine kostenlose Gesundheitsklinik in der Gemeinde"
+                <img src="images/img17.jpg"
+                    alt="Krankenhauspersonal leitet eine kostenlose Gesundheitsklinik in der Gemeinde"
                     style="object-fit: cover" />
             </div>
 
@@ -380,7 +325,8 @@ if ($err = flash('error')) {
                         Gesundheitsbildungsprogramme für Lokale Schulen
                     </li>
                 </ul>
-                <a class="btn btn-secondary" href="#" style="margin-top: 1rem">Erfahren Sie mehr über unsere Stiftung</a>
+                <a class="btn btn-secondary" href="#" style="margin-top: 1rem">Erfahren Sie mehr über unsere
+                    Stiftung</a>
             </div>
         </div>
     </section>
@@ -408,7 +354,8 @@ if ($err = flash('error')) {
                     10. MAI 2025 | WELLNESS
                 </p>
                 <h3>5 Tipps für den Start einer Gelenkschonenden Laufroutine</h3>
-                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem" href="https://rehateam.cc/news/5-tipps-fuer-deinen-laufstart/" target="_blank">Artikel Lesen</a>
+                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem"
+                    href="https://rehateam.cc/news/5-tipps-fuer-deinen-laufstart/" target="_blank">Artikel Lesen</a>
             </article>
 
             <article class="info-card">
@@ -421,7 +368,9 @@ if ($err = flash('error')) {
                     25. APRIL 2025 | FORSCHUNG
                 </p>
                 <h3>Durchbruch in der Nicht-Invasiven Krebs-Screening-Technologie</h3>
-                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem" href="https://www.analytica-world.com/de/news/1179658/fingerabdruck-durchbruch-bei-der-erkennung-von-brustkrebs.html" target="_blank">Artikel Lesen</a>
+                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem"
+                    href="https://www.analytica-world.com/de/news/1179658/fingerabdruck-durchbruch-bei-der-erkennung-von-brustkrebs.html"
+                    target="_blank">Artikel Lesen</a>
             </article>
 
             <article class="info-card">
@@ -434,11 +383,15 @@ if ($err = flash('error')) {
                     1. APRIL 2025 | KARDIOLOGIE
                 </p>
                 <h3>Bluthochdruck Verstehen und Zuhause Managen</h3>
-                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem" href="https://www.heartfailurematters.org/de/das-koennen-sie-tun/selbstaendige-messung-von-blutdruck-und-puls/" target="_blank">Artikel Lesen</a>
+                <a class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem"
+                    href="https://www.heartfailurematters.org/de/das-koennen-sie-tun/selbstaendige-messung-von-blutdruck-und-puls/"
+                    target="_blank">Artikel Lesen</a>
             </article>
         </div>
     </section>
 </main>
+
+// Formular zur Terminbuchung (Overlay)
 
 <div id="appointmentOverlay" class="appointment-overlay">
     <div class="appointment-overlay-content">
@@ -448,18 +401,21 @@ if ($err = flash('error')) {
             <div class="form-row-group">
                 <div class="form-row">
                     <label for="first-name">Vorname</label>
-                    <input type="text" id="first-name" name="first_name" class="validate-me" placeholder="z.B. John" required />
+                    <input type="text" id="first-name" name="first_name" class="validate-me" placeholder="z.B. John"
+                        required />
                     <span class="error-msg"></span>
                 </div>
                 <div class="form-row">
                     <label for="last-name">Nachname</label>
-                    <input type="text" id="last-name" name="last_name" class="validate-me" placeholder="z.B. Doe" required />
+                    <input type="text" id="last-name" name="last_name" class="validate-me" placeholder="z.B. Doe"
+                        required />
                     <span class="error-msg"></span>
                 </div>
             </div>
             <div class="form-row">
                 <label for="email">E-Mail Adresse</label>
-                <input type="email" id="email" name="email" class="validate-me" placeholder="john.doe@beispiel.de" required />
+                <input type="email" id="email" name="email" class="validate-me" placeholder="john.doe@beispiel.de"
+                    required />
                 <span class="error-msg"></span>
             </div>
             <div class="form-row">
@@ -505,7 +461,8 @@ if ($err = flash('error')) {
             </div>
             <div class="form-row">
                 <label for="message-modal">Grund des Besuchs</label>
-                <textarea id="message-modal" name="reason" class="validate-me" placeholder="Beschreiben Sie kurz Ihre Symptome oder den Grund des Besuchs..." required></textarea>
+                <textarea id="message-modal" name="reason" class="validate-me"
+                    placeholder="Beschreiben Sie kurz Ihre Symptome oder den Grund des Besuchs..." required></textarea>
                 <span class="error-msg"></span>
             </div>
             <div class="form-actions">
@@ -518,57 +475,57 @@ if ($err = flash('error')) {
 <div id="loginOverlay" class="appointment-overlay">
     <div class="appointment-overlay-content login-content">
         <button id="closeLogin" class="close-btn">&times;</button>
-        
-    <div id="loginView">
-        <h2 style="text-align: center">Willkommen Zurück</h2>
-        <form id="loginForm" class="book-form" action="process_login.php" method="POST" novalidate>
-            <input type="hidden" name="action" value="login">
-            
-            <div class="form-row">
-                <label for="login-email">E-Mail Adresse</label>
-                <input type="email" id="login-email" name="login_email" class="validate-me" placeholder="sie@beispiel.de" required />
-                <span class="error-msg"></span>
-            </div>
-            <div class="form-row">
-                <label for="login-password">Passwort</label>
-                <input type="password" id="login-password" name="login_password" class="validate-me" placeholder="••••••••••" required />
-                <span class="error-msg"></span>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" style="width: 100%">Anmelden</button>
-            </div>
-        </form>
+
+        <div id="loginView">
+            <h2 style="text-align: center">Willkommen Zurück</h2>
+            <form id="loginForm" class="book-form" action="process_login.php" method="POST" novalidate>
+                <input type="hidden" name="action" value="login">
+
+                <div class="form-row">
+                    <label for="login-email">E-Mail Adresse</label>
+                    <input type="email" id="login-email" name="login_email" class="validate-me"
+                        placeholder="sie@beispiel.de" required />
+                    <span class="error-msg"></span>
+                </div>
+                <div class="form-row">
+                    <label for="login-password">Passwort</label>
+                    <input type="password" id="login-password" name="login_password" class="validate-me"
+                        placeholder="••••••••••" required />
+                    <span class="error-msg"></span>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit" style="width: 100%">Anmelden</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
 <div id="toastNotification" class="toast">Erfolg!</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Select the toast element with the specific class added for auto-dismissal
-    const successToast = document.querySelector('.auto-dismiss-toast');
-    
-    if (successToast) {
-        // Set the delay time (2500ms = 1.5 seconds)
-        const delay = 1500; 
-        // The CSS transition for 'toast' is 0.35s (350ms)
-        const transitionDuration = 350; 
+    document.addEventListener("DOMContentLoaded", function () {
+        // Wählen Sie das Toast-Element mit der spezifischen Klasse aus, das für die automatische Schließung hinzugefügt wurde.
+        const successToast = document.querySelector('.auto-dismiss-toast');
 
-        setTimeout(() => {
-            // Remove the 'visible' class to trigger the fade-out effect defined in styles.css
-            successToast.classList.remove('visible');
+        if (successToast) {
+            // Verzögerungszeit einstellen (1500 ms = 1,5 Sekunden)
+            const delay = 1500;
+            // Die CSS-Übergangszeit für 'toast' beträgt 0,35 Sekunden (350 ms).
+            const transitionDuration = 350;
 
-            // Wait for the fade-out to complete, then remove the element from the DOM
             setTimeout(() => {
-                successToast.remove();
-            }, transitionDuration);
+                // Entferne die Klasse 'visible', um den in styles.css definierten Ausblendeffekt auszulösen.
+                successToast.classList.remove('visible');
 
-        }, delay);
-    }
-    
-    // NOTE: The JavaScript for toggling between login and register views (showRegister/showLogin)
-    // has been left out, as the register view is no longer in this file.
-});
+                // Warten Sie, bis der Ausblendvorgang abgeschlossen ist, 
+                // und entfernen Sie dann das Element aus dem DOM.
+                setTimeout(() => {
+                    successToast.remove();
+                }, transitionDuration);
+
+            }, delay);
+        }
+    });
 </script>
 <?php require_once __DIR__ . '/footer.php'; ?>

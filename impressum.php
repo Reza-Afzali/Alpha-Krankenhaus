@@ -8,11 +8,6 @@
         </p>
 
         <div class="legal-text">
-            <!-- 
-                👉 IMPORTANT:
-                Paste your real Impressum text here.
-                Replace the example below with your actual data.
-            -->
 
             <h2>Angaben gemäß § 5 TMG</h2>
             <p>

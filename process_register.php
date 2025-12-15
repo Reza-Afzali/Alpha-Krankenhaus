@@ -1,22 +1,21 @@
 <?php
-// PHP Error Reporting (KEEP THIS FOR DEBUGGING)
+// PHP-Fehlerberichterstattung (NUR ZUM DEBUGGING AUFBEWAHREN)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// 1. Load Configuration AND Database
+// 1. Konfiguration und Datenbank laden
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/db.php';
 
-// Set the header to plain text for AJAX responses
+// Setze den Header für AJAX-Antworten auf Klartext
 header('Content-Type: text/plain');
-
-// Check if the form was submitted via POST and has the required 'action' parameter
+// Prüfen, ob das Formular per POST übermittelt wurde und den erforderlichen Parameter 'action' enthält
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'register') {
 
-    // 2. Data Validation
+    // 2. Datenvalidierung
     $errors = [];
 
-    // Assign and sanitize variables
+    // Variablen zuweisen und bereinigen
     $fullName = trim($_POST['full_name'] ?? '');
     $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'] ?? '';
@@ -24,43 +23,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $dob = trim($_POST['dob'] ?? '');
     $role = trim($_POST['role'] ?? '');
 
-    // Basic required field checks (Shortened Messages)
-    // if (empty($fullName)) {
-    //     $errors[] = "Name fehlt.";
-    // }
-    // if (empty($email)) {
-    //     $errors[] = "E-Mail fehlt.";
-    // }
-    // if (empty($password)) {
-    //     $errors[] = "Passwort fehlt.";
-    // }
-    // if (empty($dob)) {
-    //     $errors[] = "Geburtsdatum fehlt.";
-    // }
-    // if (empty($role)) {
-    //     $errors[] = "Rolle fehlt.";
-    // }
 
-    // if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    //     $errors[] = "Ungültiges E-Mail-Format.";
-    // }
-    // if ($password !== $confirmPassword) {
-    //     $errors[] = "Passwörter stimmen nicht überein.";
-    // }
-
-    // DOB/AGE Validation (18+ and No Future Dates)
+    // Geburtsdatum-/Altersbestätigung (18+ und keine zukünftigen Daten)
     if (empty($errors) && !empty($dob)) {
         try {
             $dob_date = new DateTime($dob);
             $now = new DateTime();
             $age_limit = 18;
 
-            // 1. Future Date Check (Shortened Message)
+            // 1. Überprüfung des zukünftigen Datums (Kurzmeldung)
             if ($dob_date > $now) {
                 $errors[] = "Geburtsdatum liegt in der Zukunft.";
             }
 
-            // 2. Age Check (must be 18+) (Shortened Message)
+            // 2. Altersprüfung (mindestens 18 Jahre alt) (Kurzfassung)
             $min_age_date = clone $dob_date;
             $min_age_date->modify("+{$age_limit} years");
 
@@ -73,26 +49,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
         }
     }
 
-    // If no validation errors so far, proceed to database checks
+    // Falls bisher keine Validierungsfehler aufgetreten sind, fahren Sie mit den Datenbankprüfungen fort.
     if (empty($errors)) {
 
         try {
-            // 3. Password Hashing
+            // 3. Passwort-Hashing
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // 4. Check if email exists
+            // 4. Prüfen, ob eine E-Mail-Adresse existiert
             $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
             $stmt_check->execute([':email' => $email]);
 
             if ($stmt_check->fetchColumn() > 0) {
-                // Use 409 Conflict for resource duplication
+                // Verwenden Sie den Fehlercode 409 Conflict für Ressourcenduplizierung
                 http_response_code(409);
-                // Shortened Message
+                // Kurznachricht
                 echo "E-Mail ist bereits registriert.";
                 exit();
             } else {
 
-                // 5. Prepare SQL (unchanged)
+                // 5. Einfügen von ner user SQL
                 $sql = "INSERT INTO users (full_name, dob, email, role, password_hash, created_at)
                         VALUES (:full_name, :dob, :email, :role, :password_hash, NOW())";
 
@@ -106,25 +82,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
                     ':password_hash' => $hashedPassword,
                 ]);
 
-                // Success! Send 200 OK. 
+                // Erfolg! Sende 200 OK. 
                 http_response_code(200);
                 echo "Erfolgreich registriert. Wird neu geladen...";
-                // 🔴 FIX: REMOVED header('Location: admin.php'); to ensure AJAX success handling works.
+                //header('Location: admin.php'); um sicherzustellen, dass die AJAX-Erfolgsbehandlung funktioniert.
                 exit();
             }
 
         } catch (PDOException $e) {
-            // Database error
+            // Datenbankfehler
             http_response_code(500);
-            echo "Datenbankfehler."; // Generic, short error
+            echo "Datenbankfehler."; // Allgemeiner, kurzer Fehler
             exit();
         }
     }
 
-    // If validation errors occurred, send 400 Bad Request
+    // Falls Validierungsfehler auftreten, wird der Statuscode 400 (Bad Request) gesendet.
     if (!empty($errors)) {
         http_response_code(400);
-        // Send only the FIRST error for a short toast message.
+        // Senden Sie nur den ERSTEN Fehler als kurze Toast-Nachricht.
         echo $errors[0];
         exit();
     }

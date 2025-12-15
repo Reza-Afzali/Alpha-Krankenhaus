@@ -2,29 +2,28 @@
 // --- FILE: email_functions.php ---
 
 /**
- * Sends an approval email to the patient for a confirmed appointment.
- * * NOTE: For production use, replace the native mail() function 
- * with a robust library like PHPMailer or a transactional email service 
- * (e.g., SendGrid, Mailgun) for reliable delivery.
- *
- * @param array $appointmentDetails An associative array containing appointment data.
- * @return bool True on successful mail acceptance (by PHP), false otherwise.
- */
+
+* Sendet dem Patienten eine Bestätigungs-E-Mail für einen bestätigten Termin.
+
+* @param array $appointmentDetails Ein assoziatives Array mit Termindaten.
+
+* @return bool True bei erfolgreicher E-Mail-Zustellung (durch PHP), andernfalls false.
+
+*/
 function sendAppointmentApprovalEmail(array $appointmentDetails): bool
 {
-    // Extract necessary details
+    // Notwendige Details extrahieren
     $patientName = $appointmentDetails['first_name'] . ' ' . $appointmentDetails['last_name'];
     $patientEmail = $appointmentDetails['email'];
     $apptDate = $appointmentDetails['appt_date'];
     $apptTime = $appointmentDetails['appt_time'];
-    // Assuming 'doctor' is a column in your appointments table for the confirmed doctor
-    $doctor = $appointmentDetails['doctor'] ?? 'Not Assigned'; 
+    // Angenommen, „Arzt“ ist eine Spalte in Ihrer Termintabelle für den bestätigten Arzt
+    $doctor = $appointmentDetails['doctor'] ?? 'Not Assigned';
     $department = $appointmentDetails['department'];
 
-    // Hospital email address (MUST be a valid, trusted sender on your server)
+    // Krankenhaus-E-Mail-Adresse (MUSS ein gültiger, vertrauenswürdiger Absender auf Ihrem Server sein)
     $hospitalEmail = "appointments@alphahospital.com";
-    
-    // --- Email Content ---
+    // --- E-Mail-Inhalt ---
     $subject = "Your Alpha Hospital Appointment is Confirmed!";
 
     $message = "Dear " . htmlspecialchars($patientName) . ",\n\n";
@@ -39,12 +38,12 @@ function sendAppointmentApprovalEmail(array $appointmentDetails): bool
     $message .= "Thank you for choosing Alpha Hospital.\n";
     $message .= "Alpha Hospital Team\n";
 
-    // --- Email Headers (Crucial for successful delivery) ---
+    // --- E-Mail-Header (entscheidend für die erfolgreiche Zustellung) ---
     $headers = "From: Alpha Hospital Appointments <" . $hospitalEmail . ">\r\n";
     $headers .= "Reply-To: " . $hospitalEmail . "\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $headers .= "X-Mailer: PHP/" . phpversion();
 
-    // Send the email
+    // Senden Sie die E-Mail
     return mail($patientEmail, $subject, $message, $headers);
 }

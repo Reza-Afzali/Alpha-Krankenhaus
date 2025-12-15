@@ -8,11 +8,7 @@
         </p>
 
         <div class="legal-text">
-            <!-- 
-                👉 IMPORTANT:
-                Paste your real Datenschutzerklärung text here.
-                Replace the example sections with your actual policy.
-            -->
+
 
             <h2>1. Verantwortliche Stelle</h2>
             <p>

@@ -2,22 +2,22 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/db.php';
 
-// Set headers for AJAX response
+// Header für AJAX-Antwort festlegen
 header('Content-Type: text/plain');
 
-// Check if PDO is available
+// Prüfen, ob PDO verfügbar ist
 if (!isset($pdo)) {
     http_response_code(500);
     echo "Fatal Error: Database connection object (\$pdo) not initialized.";
     exit;
 }
 
-// 1. Simple server-side validation & sanitization
-// 'doctor' is now required to check for slot availability
+// 1. Einfache serverseitige Validierung und Bereinigung
+// 'doctor' muss nun die Verfügbarkeit von Slots prüfen.
 $required = ['first_name', 'last_name', 'email', 'appt_date', 'appt_time', 'reason', 'doctor'];
 foreach ($required as $r) {
     if (empty($_POST[$r])) {
-        http_response_code(400); // Use 400 for client-side validation failure
+        http_response_code(400); // Verwenden Sie den Statuscode 400 für einen Fehler bei der clientseitigen Validierung.
         echo "Please fill in all required fields.";
         exit;
     }
@@ -97,7 +97,7 @@ try {
 
 
 try {
-    // 2. Insert into database
+    // 2. In die Datenbank einfügen
     $stmt = $pdo->prepare("
         INSERT INTO appointments (first_name, last_name, email, phone, appt_date, appt_time, department, doctor, reason) 
         VALUES (:first, :last, :email, :phone, :date, :time, :department, :doctor, :reason)
@@ -115,16 +115,16 @@ try {
         ':reason' => $reason
     ]);
 
-    // 3. Success response for JavaScript
-    http_response_code(200); // Success status
-    echo "Appointment Requested Successfully!";
+    // 3. Erfolgsmeldung für JavaScript
+    http_response_code(200); // Erfolgsstatus
+    echo "Terminanfrage erfolgreich!";
 
 } catch (PDOException $e) {
-    // Log detailed error on the server side
-    error_log("Appointment DB Error: " . $e->getMessage());
+    // Detaillierte Fehlerprotokollierung auf Serverseite
+    error_log("Termin-DB-Fehler: " . $e->getMessage());
     http_response_code(500); // Internal Server Error
     // Show a generic message to the user
-    echo "A database error occurred. Please try again later.";
+    echo "Es ist ein Datenbankfehler aufgetreten. Bitte versuchen Sie es später erneut.";
     exit;
 }
 

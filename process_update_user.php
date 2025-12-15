@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/config.php';
 
-// 1. Security Check: Only Admin should access this
+// 1. Sicherheitsprüfung: Nur Administratoren sollten darauf zugreifen können
 if (empty($_SESSION['user_id']) || $_SESSION['user_role'] !== 'Admin') {
     flash('error', 'Unauthorized access.');
     header('Location: index.php');
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// 2. Retrieve and Validate Input
+// 2. Eingabe abrufen und validieren
 $user_id = filter_var($_POST['user_id'] ?? 0, FILTER_VALIDATE_INT);
 $new_role = trim($_POST['role'] ?? '');
 
@@ -28,12 +28,14 @@ if (!$user_id || !in_array($new_role, $allowed_roles)) {
     exit;
 }
 
-// IMPORTANT: Do not allow an admin to change their own role here 
-// to prevent accidental lockout, unless explicitly desired.
-// For now, we will allow it, but recommend warning the user in edit_user.php.
+// WICHTIG: Administratoren dürfen ihre Rolle hier nicht selbst ändern.
+
+// Dies verhindert versehentliche Aussperrungen, es sei denn, dies ist ausdrücklich gewünscht.
+
+// Derzeit erlauben wir dies, empfehlen jedoch, den Benutzer in edit_user.php zu warnen.
 
 try {
-    // 3. Update the user's role in the database
+    // 3. Aktualisieren Sie die Benutzerrolle in der Datenbank
     $stmt = $pdo->prepare("UPDATE users SET role = :role WHERE user_id = :id");
     $stmt->execute([
         ':role' => $new_role,

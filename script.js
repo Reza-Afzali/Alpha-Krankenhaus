@@ -1,41 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
     const timeSelect = document.getElementById("time-modal");
     const dateInput = document.getElementById("date-modal");
-    // IMPORTANT: Ensure your doctor select field has the ID 'doctor-modal'.
+    // Stellen Sie sicher, dass Ihr Arztauswahlfeld die ID 'doctor-modal' hat.
     const doctorInput = document.getElementById("doctor-modal"); 
 
-    /* --- DATE UTILITY FUNCTIONS --- */
+  /* --- DATUMS-HILFSFUNKTIONEN --- */
     function isWorkingDay(dateToCheck) {
-        const day = dateToCheck.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        return day >= 1 && day <= 5; // Monday (1) to Friday (5)
+        const day = dateToCheck.getDay(); // 0 = Sonntag, 1 = Montag, ..., 6 = Samstag
+        return day >= 1 && day <= 5; // Montag (1) bis Freitag (5)
     }
 
     function findFirstValidAppointmentDate(referenceDate) {
         let d = new Date(referenceDate);
-        d.setDate(d.getDate() + 1); // Start from tomorrow
+        d.setDate(d.getDate() + 1); // Start ab morgen
 
         let day = d.getDay();
-        if (day === 6) { // Saturday -> go to Monday (+2 days)
+        if (day === 6) { // Samstag -> geht zu Montag (+2 Tage)
             d.setDate(d.getDate() + 2);
-        } else if (day === 0) { // Sunday -> go to Monday (+1 day)
+        } else if (day === 0) { // Sonntag -> geht zu Montag (+1 Tag)
             d.setDate(d.getDate() + 1);
         }
         return d.toISOString().split('T')[0];
     }
 
-    /* --- TIME SLOT GENERATOR (DYNAMIC) --- */
-    /**
-     * Fills the time select dropdown, disabling options in bookedSlots array.
-     * @param {string[]} bookedSlots - Array of booked times (e.g., ["08:00", "09:45"]).
-     */
+    /* --- ZEITSLOT-GENERATOR --- */
+
+/**
+* Füllt das Dropdown-Menü zur Zeitauswahl und deaktiviert dabei Optionen im Array „bookedSlots“.
+
+* @param {string[]} bookedSlots - Array mit gebuchten Zeiten (z. B. ["08:00", "09:45"]).
+
+*/
     function populateTimeSlots(bookedSlots = []) {
         if (!timeSelect) return;
 
-        // Clear existing options, but keep the first 'placeholder' option (if any)
+        // Vorhandene Optionen löschen, aber die erste „Platzhalter“-Option (falls vorhanden) beibehalten
         while (timeSelect.options.length > 0 && timeSelect.options[0].value !== "") {
             timeSelect.remove(0);
         }
-         // Add a default disabled placeholder if it's not the first option
+         // Füge einen standardmäßig deaktivierten Platzhalter hinzu, falls es sich nicht um die erste Option handelt.
         if (timeSelect.options.length === 0 || timeSelect.options[0].value !== "") {
              const defaultOpt = document.createElement("option");
              defaultOpt.value = "";
@@ -46,14 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         
-        // Convert booked slots array to a Set for fast lookup
+       // Konvertiere das Array der gebuchten Slots in ein Set für schnelles Nachschlagen
         const bookedSet = new Set(bookedSlots);
 
         for (let h = 8; h < 17; h++) {
             const hr = h > 12 ? h - 12 : h;
             const ampm = h >= 12 ? "PM" : "AM";
             ["00", "45"].forEach(m => {
-                // Value in 24-hour format (e.g., "08:00")
+               // Wert im 24-Stunden-Format (z. B. "08:00")
                 const value = (h < 10 ? '0' : '') + `${h}:${m}`; 
                 const display = `${hr}:${m} ${ampm}`;
                 
@@ -62,35 +65,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 opt.innerText = display;
 
                 if (bookedSet.has(value)) {
-                    opt.disabled = true; // Disable if booked
+                    opt.disabled = true; // Deaktivieren, wenn gebucht
                     opt.innerText += " (Booked)";
                 }
 
                 timeSelect.appendChild(opt);
             });
         }
-        // Force selection to the placeholder or the first available option
+       // Erzwinge die Auswahl des Platzhalters oder der ersten verfügbaren Option
         if (timeSelect.value === null || timeSelect.value === "") {
             timeSelect.value = timeSelect.options[0].value;
         }
     }
 
-    /* --- AVAILABILITY FETCHER --- */
+    /* --- VERFÜGBARKEITSABFRAGE --- */ 
     async function fetchUnavailableSlots() {
         if (!dateInput || !doctorInput || !timeSelect) return;
 
         const date = dateInput.value;
         const doctor = doctorInput.value;
 
-        // Only fetch if a valid date AND a doctor are selected
+       // Nur abrufen, wenn ein gültiges Datum UND ein Arzt ausgewählt sind
         if (!date || !doctor || doctor === "") {
-            // If date/doctor is missing, show all slots
+            // Falls Datum/Arzt fehlt, werden alle Einträge angezeigt.
             populateTimeSlots([]); 
             return;
         }
 
         try {
-            // NOTE: Calling the NEW PHP file 'fetch_booked_slots.php'.
+            // HINWEIS: Aufruf der NEUEN PHP-Datei 'fetch_booked_slots.php'.
             const url = `fetch_booked_slots.php?date=${date}&doctor=${doctor}`;
             const res = await fetch(url);
             
@@ -107,9 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    // --- Initialization and Event Listeners ---
-    
-    // Set min date and initial slots on load
+   // --- Initialisierung und Ereignis-Listener ---
+
+// Mindestdatum und Startzeit beim Laden festlegen
     if (dateInput) {
         const today = new Date();
         const minWorkingDate = findFirstValidAppointmentDate(today);
@@ -121,10 +124,10 @@ document.addEventListener("DOMContentLoaded", function () {
             dateInput.value = minWorkingDate; 
         }
 
-        // Trigger slot update when date or doctor changes
+        // Aktualisierung des Auslösers bei Datums- oder Arztwechsel
         dateInput.addEventListener('change', fetchUnavailableSlots);
         dateInput.addEventListener('input', function() {
-            // Auto-correction logic (for weekends)
+           // Autokorrekturlogik (für Wochenenden)
             const selectedDate = new Date(this.value);
             if (selectedDate instanceof Date && !isNaN(selectedDate) && !isWorkingDay(selectedDate)) {
                 let day = selectedDate.getDay();
@@ -142,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 validateField(this);
             }
-            fetchUnavailableSlots(); // Update slots on any valid/corrected change
+            fetchUnavailableSlots(); // Aktualisiere die Slots bei jeder gültigen/korrigierten Änderung
         });
     }
 
@@ -150,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         doctorInput.addEventListener('change', fetchUnavailableSlots);
     }
     
-    // Initial population of slots and fetch
+   // Initialisierung der Slots und Abruf
     populateTimeSlots([]); 
     setTimeout(fetchUnavailableSlots, 100); 
 
@@ -182,7 +185,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("closeLogin")?.addEventListener("click", () => loginOverlay.classList.remove("show"));
     document.getElementById("closeAppointment")?.addEventListener("click", () => apptOverlay.classList.remove("show"));
     
-    // Admin Register Modal Logic - Note: This logic is duplicated in admin.php's inline script 
+    // Logik des Admin-Registrierungsmodus – 
+    // Hinweis: Diese Logik ist im Inline-Skript von admin.php dupliziert.
     if (registerOverlay) {
         closeRegisterBtn?.addEventListener('click', () => {
             registerOverlay.classList.remove('show');
@@ -202,32 +206,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    /* 3. UNIVERSAL FORM HANDLING & AJAX SUBMISSION FIX */
+    /* 3. Behebung des Problems mit der universellen Formularverarbeitung 
+    und der AJAX-Übermittlung */
     const forms = document.querySelectorAll("form");
     forms.forEach(form => {
         form.addEventListener("submit", async e => {
             const isApptForm = form.id === 'apptForm';
-            //  Target the register form for AJAX
+           // Das Registrierungsformular für AJAX ansprechen
             const isRegisterForm = form.id === 'registerForm';
 
-            // Stop submission and run client-side validation
+            // Die Übermittlung stoppen und die clientseitige Validierung ausführen
             if (!validateForm(form)) { 
                  e.preventDefault(); 
-                 // Find and display the first error message as a toast (flash message style)
+                 // Die erste Fehlermeldung suchen und als Toast (Blitznachricht) anzeigen
                  const firstInvalid = form.querySelector('.invalid');
                  if (firstInvalid) {
                      firstInvalid.focus();
-                     // Use the error message content from the span next to the input
+                     // Verwende den Inhalt der Fehlermeldung aus dem Span-Element neben dem Eingabefeld.
                      showToast(firstInvalid.nextElementSibling.textContent || "Bitte korrigieren Sie die Fehler.", 'error');
                  }
                  return; 
             }
 
-            // Use AJAX for both appointment and register forms
+            // Verwenden Sie AJAX sowohl für Termin- als auch für Registrierungsformulare
             if (isApptForm || isRegisterForm) { 
                 e.preventDefault(); 
                 const formData = new FormData(form);
-                //  Correctly set the action URL
+                // Die Aktions-URL korrekt festlegen
                 let actionUrl = isApptForm ? 'process_appointment.php' : 'process_register.php'; 
                 
                 try {
@@ -239,22 +244,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (isRegisterForm) {
                             showToast("Benutzer erfolgreich registriert!", 'success'); 
                             form.reset();
-                            // Close the modal
+                            // Schließen Sie das Modal.
                             document.getElementById('registerOverlay')?.classList.remove("show");
                             document.getElementById('registerOverlay')?.classList.add("hidden");
-                            // Reload the admin page to see the new user in the list
+                            // Laden Sie die Admin-Seite neu, um den neuen Benutzer in der Liste zu sehen.
                             window.location.reload(); 
                         } else {
-                            // Appointment success logic
+                            // Terminerfolgslogik
                             showToast("Termin erfolgreich angefragt!", 'success'); 
                             form.reset();
                             apptOverlay.classList.remove("show");
                             fetchUnavailableSlots(); 
                         }
                     } else {
-                        // Server-side validation failure (e.g., email already exists)
+                        // Serverseitiger Validierungsfehler (z. B. E-Mail-Adresse existiert bereits)
                         const errorText = await res.text();
-                        // Server error text is displayed as an error toast
+                        // Der Serverfehlertext wird als Fehlermeldung angezeigt.
                         showToast(errorText || "Fehler bei der Registrierung/Terminbuchung.", 'error');
                     }
                 } catch (err) { 
@@ -262,82 +267,86 @@ document.addEventListener("DOMContentLoaded", function () {
                     showToast("Netzwerkfehler aufgetreten.", 'error'); 
                 }
             } 
-            // Other forms (loginForm) submit normally after validation
+            // Andere Formulare (Login-Formular) werden nach der Validierung normal übermittelt.
         });
     });
     
-    /* --- VALIDATION UTILITIES (FIXED DOB LOGIC) --- */
+  /* --- VALIDIERUNGSHILFEN (LOGIK FÜR FESTES GEBURTSDATUM) --- */
     function validateField(input) {
-        // Look for the error span right after the input
+        // Suche nach dem Fehlerbereich direkt nach der Eingabe
         const errorSpan = input.nextElementSibling;
         let isValid = true;
         let msg = "";
         
-        // Always reset invalid state and error message before validation
+        // Ungültigen Zustand und Fehlermeldung vor der Validierung immer zurücksetzen.
         input.classList.remove("invalid");
         if (errorSpan?.classList.contains("error-msg")) errorSpan.textContent = "";
 
         const value = input.value.trim();
         
-        // --- 1. UNIVERSAL REQUIRED CHECK ---
+   // --- 1. UNIVERSAL ERFORDERLICHE PRÜFUNG ---
         const isRegisterForm = input.form && input.form.id === 'registerForm';
         const isRequiredRegisterField = isRegisterForm; 
         
-        // Check if required in HTML (for appt form) OR required by JS logic (for register form)
+        // Prüfen, ob es im HTML-Code (für das Terminformular) oder in der JavaScript-Logik 
+        // (für das Registrierungsformular) erforderlich ist
         if (input.hasAttribute("required") && !value) { 
              isValid = false; msg = "Feld erforderlich"; 
         } else if (isRequiredRegisterField && !value) {
-             // For register form, if required and empty
+             // Für das Registrierungsformular, falls erforderlich und leer
              if (input.name !== 'phone' && input.type !== 'submit') {
                 isValid = false; 
                 msg = "Feld erforderlich."; 
              }
         }
         
-        // --- 2. EMAIL VALIDATION ---
+       // --- 2. E-Mail-Validierung ---
         else if (isValid && input.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { 
             isValid = false; msg = "Ungültiges E-Mail-Format"; 
         } 
         
-        // --- 3. PASSWORD MATCH CHECK (REGISTRATION) ---
+       // --- 3. PASSWORTÜBERPRÜFUNG (REGISTRIERUNG) ---
         else if (isValid && input.id === "reg-confirm-password") {
             const pass = document.getElementById("reg-password");
             if (pass && value !== pass.value) { isValid = false; msg = "Passwörter stimmen nicht überein"; }
         }
         
-        // DOB VALIDATION (No Future Date & 18+ Age Check)
+       // Geburtsdatumsvalidierung (Kein zukünftiges Datum & Altersprüfung ab 18 Jahren)
         else if (isValid && input.name === 'dob') {
             const dob = new Date(value);
             const now = new Date();
-            // Set time components to 0 for accurate date-only comparison against today
+           // Setzen Sie die Zeitkomponenten auf 0, um einen genauen Datumsvergleich mit dem heutigen Datum zu ermöglichen.
             const dobDateOnly = new Date(dob.getFullYear(), dob.getMonth(), dob.getDate());
             const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-            const minAge = 18; // Enforce 18+ as requested by the user
-            // Calculate the date 'minAge' years after DOB
+            const minAge = 18; 
+            // Altersfreigabe ab 18 Jahren erzwingen (Benutzerwunsch)
+
+           //Mindestalter Jahre nach dem Geburtsdatum berechnen (Datum „minAge“)
+
             const ageDate = new Date(dob.getFullYear() + minAge, dob.getMonth(), dob.getDate());
 
             if (isNaN(dob) || value === '') { 
                  isValid = false; msg = "Geburtsdatum ist erforderlich.";
             } 
-            // 1. Check if DOB is in the future (DOB date > Current date)
+            // 1. Prüfen, ob das Geburtsdatum in der Zukunft liegt (Geburtsdatum > Aktuelles Datum)
             else if (dobDateOnly > nowDateOnly) {
                 isValid = false;
                 msg = "Geburtsdatum darf nicht in der Zukunft liegen.";
             }
-            // 2. Check if the user is 18+
+          // 2. Prüfen, ob der Nutzer 18+ ist
             else if (ageDate > now) { 
                 isValid = false;
                 msg = `Benutzer muss mindestens ${minAge} Jahre alt sein. Kann niemanden unter 18 hinzufügen.`;
             }
         }
         
-        // --- 5. ROLE SELECTION CHECK (REGISTRATION) ---
+        // --- 5. ROLLENAUSWAHLPRÜFUNG (REGISTRIERUNG) ---
         else if (isValid && input.name === 'role' && value === "") {
              isValid = false; msg = "Bitte wählen Sie eine Rolle aus.";
         }
         
-        // --- 6. APPOINTMENT DATE VALIDATION ---
+        // --- 6. Bestätigung des Termindatums ---
         else if (isValid && input.id === "date-modal") {
             const selectedDate = new Date(input.value);
             const today = new Date();
@@ -354,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (!isValid) { 
-            //  Ensure invalid class is applied for styling
+            // Sicherstellen, dass ungültige Klassen für das Styling angewendet werden
             input.classList.add("invalid"); 
             if (errorSpan) errorSpan.textContent = msg; 
         }
@@ -363,10 +372,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateForm(form) {
         let valid = true;
-        // Validate all fields with the 'validate-me' class
+     // Alle Felder mit der Klasse 'validate-me' validieren
         form.querySelectorAll(".validate-me").forEach(i => {
-            // Check if element is visible and validate it
-            // Run validation and update the overall 'valid' status
+           // Prüfen, ob das Element sichtbar ist und es validieren
+
+           // Validierung durchführen und den Gesamtstatus „gültig“ aktualisieren
+
             if (i.offsetParent !== null && !validateField(i)) {
                  valid = false;
             }
@@ -374,23 +385,24 @@ document.addEventListener("DOMContentLoaded", function () {
         return valid;
     }
 
-    // Update showToast to handle success/error types
+    // Aktualisiere showToast, um Erfolgs-/Fehlertypen zu verarbeiten
     function showToast(message, type = 'error') {
-        // Ensure toast element exists (it's defined in index.php)
+        // Sicherstellen, dass das Toast-Element existiert (es ist in index.php definiert)
         const toast = document.getElementById("toastNotification") || document.querySelector('.toast:not(.auto-dismiss-toast)');
         if (toast) { 
             toast.textContent = message; 
             toast.classList.add("visible"); 
             
-            // Set color based on type
+           // Farbe basierend auf dem Typ festlegen
             if (type === 'success') {
-                // Use var(--color-tertiary) for success
+                // Verwende var(--color-tertiary) für Erfolg
                 toast.style.background = 'var(--color-tertiary, #108779)'; 
-            } else { // 'error' or default
-                toast.style.background = '#c82333'; // Use error color
+            } else { // 'error' oder Standardwert
+                toast.style.background = '#c82333'; // Fehlerfarbe verwenden
             }
 
-            // Ensure toast is repositioned for visibility in the modal context
+            // Sicherstellen, dass die Toast-Benachrichtigung im Modal-Kontext 
+            // für die Sichtbarkeit neu positioniert wird
             toast.style.position = 'fixed'; 
             toast.style.left = '50%'; 
             toast.style.transform = 'translateX(-50%)'; 
@@ -401,8 +413,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Attach validation listeners to blur event for immediate feedback
+    // Validierungs-Listener an das Blur-Ereignis anhängen, um sofortiges Feedback zu erhalten
     document.querySelectorAll(".validate-me").forEach(i => i.addEventListener("blur", () => validateField(i)));
-    // Also attach to change event for selects and dates
+    // Auch an Änderungsereignisse für Auswahllisten und Datumsangaben anhängen.
     document.querySelectorAll("select.validate-me, input[type='date'].validate-me").forEach(i => i.addEventListener("change", () => validateField(i)));
 });
